@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Look-Ahead8-github.io/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/Look-Ahead8-github.io/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="欢迎来到我的博客">
+  <meta name="author" content="蒙家辉">
+  <meta name="keywords" content="">
+  <title>HashMap的工作原理和底层实现（二）红黑树的左旋、右旋 ~ Meng&#39;s blog</title>
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/Look-Ahead8-github.io/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/Look-Ahead8-github.io/">&nbsp;<strong>Meng's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/archives/">文章</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/Look-Ahead8-github.io/img/index.jpg')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Friday, February 28th 2020, 8:27 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.3k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      5 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>﻿<h3><br>  HashMap中的红黑树左旋、右旋</p>
+</h3>
+
+<hr></hr>
+<blockquote  mdtype="blockquote" style="box-sizing: border-box;margin-top: 0.8em;margin-bottom: 0.8em;border-left-width: 4px;border-left-color: rgb(66, 185, 131);padding: 10px 15px;color: rgb(119, 119, 119);background-color: rgba(66, 185, 131, 0.1);font-family: &quot;Source Sans Pro&quot;, &quot;Helvetica Neue&quot;, Arial, sans-serif;font-size: 16px;text-align: start;white-space: normal;"><h4>摘要:</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;HashMap是java最常用的容器之一，本文会通过阅读源码的方式来理解HashMap中是如何进行红黑树的左旋和右旋</p></blockquote>
+
+<h4 id="一、什么是左旋和右旋"><a href="#一、什么是左旋和右旋" class="headerlink" title="一、什么是左旋和右旋"></a>一、什么是左旋和右旋</h4><hr></hr>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;红黑树的性质</p>
+<ul>
+    <li>每个节点要么是黑色，要么是红色。</li>
+    <li>根节点是黑色。</li>
+    <li>每个叶子节点（NIL）是黑色。</li>
+    <li>每个红色结点的两个子结点一定都是黑色。</li>
+    <li>任意一结点到每个叶子结点的路径都包含数量相同的黑结点。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每当对红黑树结点进行增删改的时候可能会破坏红黑树的性质，因此我们需要维持这5条性质。有三种方式:<strong>变色、左旋、右旋</strong>.变色简单，本文会根据HashMap的源码分析左旋和右旋</p>
+<p><Strong>1)左旋</Strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以结点p作为支点进行左旋，其左子结点不变，右子结点变为p的右子节点的左子结点，且p的父结点变为左子结点。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;支点为p，其父结点为pp，右子结点和左子结点为r和l，r的左右孩子分别为rl和rr。则示意图如下：</p>
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200216142519497.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzA5NTM3,size_16,color_FFFFFF,t_70)
+
+<p><Strong>2)右旋</Strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以结点p作为支点右旋，其右子结点不变，左子结点变为其左子结点的右子结点，且p的父结点变为右子结点。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如图所示</p>
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200216142212451.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzA5NTM3,size_16,color_FFFFFF,t_70)
+
+
+
+<h4 id="二、HashMap对左旋右旋的实现"><a href="#二、HashMap对左旋右旋的实现" class="headerlink" title="二、HashMap对左旋右旋的实现"></a>二、HashMap对左旋右旋的实现</h4><hr/>
+##### （1)左旋
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;源码如下</p>
+```java
+       //root为根节点，p为旋转的结点
+       static <K,V> TreeNode<K,V> rotateLeft(TreeNode<K,V> root,
+                                              TreeNode<K,V> p) {
+            TreeNode<K,V> r, pp, rl;
+            if (p != null && (r = p.right) != null) {   //如果p不为空且存在右子结点r
+                if ((rl = p.right = r.left) != null)    //判断右子结点的左子结点rl存在
+                    rl.parent = p;                      //存在设置rl的父节点为p
+                if ((pp = r.parent = p.parent) == null) //判断p的父节点pp是否存在
+                    (root = r).red = false;            //如果不存在设置新的根节点为r且黑色
+                else if (pp.left == p)                 //父结点pp存在且p为pp的左子结点
+                    pp.left = r;
+                else                                   //父结点pp存在且p为pp的左子结点
+                    pp.right = r;
+                r.left = p;
+                p.parent = r;
+            }
+            return root;
+        }
+```
+
+
+
+<p>形参root为红黑树的根节点，因为左旋和右旋可能会改变根节点，p为旋转的结点，r为p的右子节点，pp为【的父节点，rl为r的左子结点。返回值为根结点.旋转分如下步骤</p>
+<ul>
+    <li>1.如果结点p为空或者p不存在右子结点r（此时完成不了旋转）,则直接返回，否则继续如下步骤.</li>
+    <li>2.如果rl不为空，则使p的右边等于rl。否则如果rl为空则不用操作，直接下一步</li>
+    <li>3.如果p没有父结点，即他本身就是根节点，那么设置r为根节点，并设置r为黑色（红黑树的性质2）.如果p父结点存在且p为父结点的左子结点，则父结点的左子结点设置为r。如果p父结点存在且p为父结点的右子节点，则父结点的右子结点设置为r。</li>
+    <li>4.最后把r的左子节点设置为p，p的父结点设置为r</li>
+</ul>
+
+<h5 id="（2-右旋"><a href="#（2-右旋" class="headerlink" title="（2)右旋"></a>（2)右旋</h5><p>​        右旋和左旋类似</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;源码如下</p>
+```java
+       //root为根节点，p为旋转的结点
+       static <K,V> TreeNode<K,V> rotateRight(TreeNode<K,V> root,
+                                               TreeNode<K,V> p) {
+            TreeNode<K,V> l, pp, lr;
+            if (p != null && (l = p.left) != null) {    //如果p不为空且存在左子结点l
+                if ((lr = p.left = l.right) != null)    //判断左子结点的右子结点lr存在
+                    lr.parent = p;                      //存在则设置rl的父结点为p
+                if ((pp = l.parent = p.parent) == null) //判断p的父结点pp是否存在
+                    (root = l).red = false;          //如果不存在设置新的根节点为l且l为黑色
+                else if (pp.right == p)              //父结点pp存在且p为pp的右子结点
+                    pp.right = l;
+                else                                 //父结点pp存在且p为pp的左子结点
+                    pp.left = l;
+                l.right = p;
+                p.parent = l;
+            }
+            return root;
+        }
+```
+
+
+
+<p>p为旋转的结点，l为p的左子节点，pp为p的父节点，lr为l的右子结点。返回值为根结点.旋转分如下步骤</p>
+<ul>
+    <li>1.如果结点p为空或者p不存在左子结点r（此时完成不了旋转）,则直接返回，否则继续如下步骤.</li>
+    <li>2.如果lr不为空，则使p的左边等于lr。否则如果lr为空则不用操作，直接下一步</li>
+    <li>3.如果p没有父结点，即他本身就是根节点，那么设置l为根节点，并设置l为黑色（红黑树的性质2）.如果p父结点存在且p为父结点的左子结点，则父结点的左子结点设置为l。如果p父结点存在且p为父结点的右子节点，则父结点的右子结点设置为l。</li>
+    <li>4.最后把l的左子节点设置为p，p的父结点设置为l</li>
+</ul>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/java">java</a>
+                
+                  <a class="hover-with-bg" href="/tags/hashmap">hashmap</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E9%93%BE%E8%A1%A8">链表</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91">红黑树</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/Look-Ahead8-github.io/lib/jquery/jquery.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/popper/popper.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/Look-Ahead8-github.io/js/main.js" ></script>
+
+
+  <script src="/Look-Ahead8-github.io/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/Look-Ahead8-github.io/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/Look-Ahead8-github.io/js/post.js" ></script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "HashMap的工作原理和底层实现（二）红黑树的左旋、右旋&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/js/local-search.js" ></script>
+  <script>
+    var path = "/Look-Ahead8-github.io/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

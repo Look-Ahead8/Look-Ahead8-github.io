@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Look-Ahead8-github.io/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/Look-Ahead8-github.io/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="欢迎来到我的博客">
+  <meta name="author" content="蒙家辉">
+  <meta name="keywords" content="">
+  <title>蓝桥杯 算法训练 K好数（动态规划） ~ Meng&#39;s blog</title>
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/Look-Ahead8-github.io/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/Look-Ahead8-github.io/">&nbsp;<strong>Meng's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/archives/">文章</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/Look-Ahead8-github.io/img/index.jpg')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Friday, February 28th 2020, 8:07 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      4 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>﻿## 蓝桥杯 算法训练 K好数（动态规划）</p>
+<p>资源限制</p>
+<p>时间限制：1.0s   内存限制：256.0MB</p>
+<hr/>
+
+<p>问题描述</p>
+<p>如果一个自然数N的K进制表示中任意的相邻的两位都不是相邻的数字，那么我们就说这个数是K好数。求L位K进制数中K好数的数目。例如K = 4，L = 2的时候，所有K好数为11、13、20、22、30、31、33 共7个。由于这个数目很大，请你输出它对1000000007取模后的值。</p>
+<hr/>
+
+<p>输入格式</p>
+<p>输入包含两个正整数，K和L。</p>
+<hr/>
+
+<p>输出格式</p>
+<p>输出一个整数，表示答案对1000000007取模后的值。</p>
+<hr/>
+
+<p>样例输入</p>
+<p>4 2</p>
+<hr/>
+
+<p>样例输出</p>
+<p>7</p>
+<hr/>
+
+<p>数据规模与约定</p>
+<p>对于30%的数据，KL &lt;= 106；</p>
+<p>对于50%的数据，K &lt;= 16， L &lt;= 10；</p>
+<p>对于100%的数据，1 &lt;= K,L &lt;= 100。</p>
+<hr/>
+
+<h5 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h5><p>​        首先<strong>看到要取模，大概率不能用深搜暴力，且数据规模较大</strong>,深搜只能过百分之30的数据。而我们一一列出来的时候，是可以根据L-1的情况填数的，故有依赖于子结构，所以我们用动态规划。</p>
+<h5 id="1-确立dp数组的含义"><a href="#1-确立dp数组的含义" class="headerlink" title="1.确立dp数组的含义"></a>1.确立dp数组的含义</h5><p>​        对于这种连续数字的，我们一般都根据末尾来存储状态，以及上文提到过的还要根据L的状态，所以我们需要一个二维数组dp。<strong><code>dp[i][j]</code>表示在L=i时末位为J有多少种。</strong>每次填充数组时候都需要进行取模的运算。最后的答案就是对i=L的情况下J从1到K-1进行叠加。为什么是这样，往后看。</p>
+<h5 id="2-找到状态转移方程"><a href="#2-找到状态转移方程" class="headerlink" title="2.找到状态转移方程"></a>2.找到状态转移方程</h5><p>​        思考一下，在L=1的时候有0，1，2，3总共4种。如果我们要天下L=1且结尾J=1的情况，且不能够相邻。我们只用在1和3后面加1，即11和13两种，所以就是把不相邻的情况加起来就行了。注意，虽然最后答案不存在以0开头的数字，但是在计算的时候我们也要计算，不然如果求解K=4，L=3的情况下，类似200这种情况就算不到，因为在L=2的时候我们不算00这种情况。所以最后需要从1到K-1进行叠加而不是0到K-1进行叠加。举个例子，按照这个状态转移方程算出来如下。</p>
+<p>​        </p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th>总共</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i=2,j=0</td>
+<td>00</td>
+<td>20</td>
+<td>30</td>
+<td>3</td>
+</tr>
+<tr>
+<td>i=2,j=1</td>
+<td>11</td>
+<td>31</td>
+<td></td>
+<td>2</td>
+</tr>
+<tr>
+<td>i=2,j=2</td>
+<td>02</td>
+<td>22</td>
+<td></td>
+<td>2</td>
+</tr>
+<tr>
+<td>i=2,j=3</td>
+<td>03</td>
+<td>13</td>
+<td>33</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<p>​      多出来的0开头的就相当于J=0的时候调转过来，所以数目是一样的，因此就是对于dp数组i=L情况下j从0到K-1叠加减去i=0,就相当于对i=L的情况下J从1到K-1进行叠加。</p>
+<h5 id="3-填表并赋初始值"><a href="#3-填表并赋初始值" class="headerlink" title="3.填表并赋初始值"></a>3.填表并赋初始值</h5><p>​       以K=4，L=3为分析</p>
+<p>​       对于前面的分析，表格如下</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>​      因为我们每填一个表格都需要i-1的情况，因此在i=0时候是没有的，而i=0没有意义我们不管就是默认值0，然后i=1一位数的情况是不管以什么结尾都是只有1种情况，最后填完初始表格如下。</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>​     最后根据状态转移方程完善表格，如下</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>8</td>
+<td>5</td>
+<td>5</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<p>   最后答案就是i=3,j=1,2,3（直到K-1）相加，结果为5+5+8=13.最后写代码时候记得取余，因为a+b=c，则a%x+b%x=c%x.</p>
+<h5 id="最终代码"><a href="#最终代码" class="headerlink" title="最终代码"></a>最终代码</h5><pre><code class="java">import java.util.Scanner;
+
+/**
+ * @author Meng
+ * @date 2020/2/1
+ */
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner=new Scanner(System.in);
+        int K=scanner.nextInt();
+        int L=scanner.nextInt();
+        int[][] dp=new int[L+1][K];
+        for(int i=0;i&lt;K;i++){
+            dp[1][i]=1;
+        }
+        for(int i=2;i&lt;L+1;i++){
+            for(int j=0;j&lt;K;j++){
+                for(int k=0;k&lt;K;k++){
+                    if(Math.abs(k-j)!=1){
+                        dp[i][j]+=dp[i-1][k];
+                        dp[i][j]%=1000000007;
+                    }
+                }
+            }
+        }
+        int result=0;
+        for(int i=1;i&lt;K;i++){
+            result+=dp[L][i];
+            result%=1000000007;
+        }
+        System.out.println(result);
+    }
+}</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/20200202192854501.png" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="在这里插入图片描述"></p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/java">java</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95">算法</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF">蓝桥杯</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>
+                
+                  <a class="hover-with-bg" href="/tags/dfs">dfs</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/Look-Ahead8-github.io/lib/jquery/jquery.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/popper/popper.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/Look-Ahead8-github.io/js/main.js" ></script>
+
+
+  <script src="/Look-Ahead8-github.io/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/Look-Ahead8-github.io/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/Look-Ahead8-github.io/js/post.js" ></script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "蓝桥杯 算法训练 K好数（动态规划）&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/js/local-search.js" ></script>
+  <script>
+    var path = "/Look-Ahead8-github.io/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Look-Ahead8-github.io/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/Look-Ahead8-github.io/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="欢迎来到我的博客">
+  <meta name="author" content="蒙家辉">
+  <meta name="keywords" content="">
+  <title>动手实现一个破产版tomcat ~ Meng&#39;s blog</title>
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/Look-Ahead8-github.io/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/Look-Ahead8-github.io/">&nbsp;<strong>Meng's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/archives/">文章</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/Look-Ahead8-github.io/img/index.jpg')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Friday, February 28th 2020, 8:02 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    3.1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      14 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>﻿# 一步一步实现一个破产版tomcat</p>
+<p>　　tomcat服务器在我们java后台开发中可以说是经常接触到的,每次当我们写好我们的程序时，都要启动tomcat才能生效。</p>
+<p>　　那么我们有没有想过tomcat到底为我们完成了什么事情？再进一步的说，我们开发时肯定离不开Servlet，那就有一个疑问为什么我们写好的Sevlet并不需要编写一个main函数new一个示例就可以生效执行我们的代码？其实这些工作都是由tomcat默默帮我们完成了。接下来我们可以自己写一个简易的破产版tomcat来简单的理解其中的奥妙。</p>
+<h3 id="一、动手前的准备工作"><a href="#一、动手前的准备工作" class="headerlink" title="一、动手前的准备工作"></a>一、动手前的准备工作</h3><hr>
+<ul>
+<li>1.对HTTP协议有所了解</li>
+<li>2.了解对javase的io流操作</li>
+<li>3.了解javase的Socket编程</li>
+<li>4.了解java的反射机制</li>
+</ul>
+<p>如果你已经准备好了，那么现在就开始和我一起动手吧</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X2dpZi9XZUJKcldadnUza0JMV0tyejd1RWxySVJPN1hoY1I3VjhZaWNtSmQ3dEVKRGpzVGJ3VWV5dzJjQnNZQ2YzMEJTd1l4V1I4Zng2bUVUaEhNN3Z2aWJFMWlidy82NDA?x-oss-process=image/format,png" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="img"></p>
+<h3 id="二、需求分析"><a href="#二、需求分析" class="headerlink" title="二、需求分析"></a>二、需求分析</h3><hr>
+<ul>
+<li><p>1.建立一个专门存放静态资源文件的WebContent文件夹，并能够在浏览器实现对静态资源的访问</p>
+</li>
+<li><p>2.能够实现浏览器对Servlet的访问(即对动态资源的访问)</p>
+</li>
+<li><p>3.在浏览器发送shutdown能实现对tomcat的关闭。</p>
+</li>
+</ul>
+<hr>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="三、实现对静态资源文件的访问"><a href="#三、实现对静态资源文件的访问" class="headerlink" title="三、实现对静态资源文件的访问"></a>三、实现对静态资源文件的访问</h3><hr>
+<p>　　首先，我们需要打开ide创建好项目，并且在项目的路径下创建WebContent文件夹存放我们写好的html文件，demo_1.html和demo_2.html,并创建好存放我们代码的包，里面包含TomcatServer类来完成我们本次的工作。结构图如下:</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9XZUJKcldadnUza0JMV0tyejd1RWxySVJPN1hoY1I3VlR6Smt5OVljY1dSbG9nR3kza3hQZ2xOTHlQN2pBZnU0cldJdFBnOGNhaWM4dnprbURRb1RUUncvNjQw?x-oss-process=image/format,png" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="img"></p>
+<p>　　</p>
+<p>　　demo_01.html内容如下：</p>
+<pre><code class="html"> &lt;!DOCTYPE html&gt;
+ &lt;html lang=&quot;en&quot;&gt;
+ &lt;head&gt;
+     &lt;meta charset=&quot;UTF-8&quot;&gt;
+     &lt;title&gt;demo_01.html&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+ &lt;h1&gt;这是demo_01html&lt;/h1&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;</code></pre>
+<p>　　demo_02.html内容如下：</p>
+<pre><code class="html"> &lt;!DOCTYPE html&gt;
+ &lt;html lang=&quot;en&quot;&gt;
+ &lt;head&gt;
+     &lt;meta charset=&quot;UTF-8&quot;&gt;
+     &lt;title&gt;demo_02.html&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+ &lt;h1&gt;这是demo_02.html&lt;/h1&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;</code></pre>
+<p>　　接下来终于进入正题了.我们的服务器需要处理对WebContent目录中的静态资源的请求，因此我们需要定义一个final常量WEB_ROOT来存放WebContent的路径，同时还要考虑到良好的<strong>跨平台性</strong>。我们可以这样写。</p>
+<pre><code class="java"> private static final String WEB_ROOT=System.getProperty(&quot;user.dir&quot;)+File.separator+&quot;WebContent&quot;;</code></pre>
+<p>　　我们还需要一个变量url存放客户端请求的资源（即端口号后面的部分）</p>
+<pre><code class="java"> private static String url = &quot;&quot;;</code></pre>
+<p>　　最后我们还需要一个常量存放停止tomcat命令，和一个布尔变量判断是否停止</p>
+<pre><code class="java">private static final String SHUTDOWN_COMMAND=&quot;SHUTDOWN&quot;;
+private static boolean shutdown=false;</code></pre>
+<p>　　经过这些工作之后我们终于可以写我们的main函数，我监听的是8080端口</p>
+<pre><code class="java">public static void main(String[] args) {
+        ServerSocket serverSocket = null;
+        Socket socket = null;
+        InputStream is = null;
+        OutputStream out = null;
+        try {
+            serverSocket = new ServerSocket(8080);
+            while (!shutdown) {
+                socket = serverSocket.accept();
+                is = socket.getInputStream();
+                out = socket.getOutputStream();
+                //解析http请求并完成对url的赋值
+                parse(is);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != is) {
+                    is.close();
+                }
+                if (null != out) {
+                    out.close();
+                }
+                if (null != socket) {
+                    socket.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }</code></pre>
+<p>　　对于parse(is)函数，我们通过输入流获取到全部的http请求（<strong>http请求的发送在客户端的浏览器已经帮我们完成了</strong>）。</p>
+<pre><code class="java">   /**
+     * 解析http请求
+     */
+    private static void parse(InputStream is) throws IOException {
+        StringBuffer httprequest=new StringBuffer(2048);
+        byte[] bytes=new byte[2048];
+        int len=is.read(bytes);
+        httprequest.append(new String(bytes, 0, len));
+        //获取url,parseurl(httprequest)函数完成后记得去掉注释
+        //parseurl(httprequest);
+        System.out.println(httprequest);
+    }</code></pre>
+<p>　　然后我们在浏览器中输入<strong><a href="http://localhost:8080/demo01.html" target="_blank" rel="noopener">http://localhost:8080/demo01.html</a></strong>控制台打印，成功获取到了http请求</p>
+<pre><code class="html"> GET /demo_01.html HTTP/1.1
+ Host: localhost:8080
+ Connection: keep-alive
+ Upgrade-Insecure-Requests: 1
+ User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36
+ Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+ Accept-Encoding: gzip, deflate, br
+ Accept-Language: zh-CN,zh;q=0.9</code></pre>
+<p>　　现在要完成parseurl(is)函数，就是要获取到http请求行中的<strong>demo_01.html</strong>，通过简单的字符串操作就行了.</p>
+<pre><code class="java">   /**
+     * 获取http请求中的请求资源名
+     * @param httprequest
+     */
+    private static void parseurl(StringBuffer httprequest) {
+        int index1, index2;
+        index1 = httprequest.indexOf(&quot; &quot;);
+        if (index1 != -1) {
+            index2 = httprequest.indexOf(&quot; &quot;, index1 + 1);
+            if (index2 &gt; index1) {
+                url = httprequest.substring(index1 + 2, index2);
+            }
+            System.out.println(url);
+        }
+    }
+}</code></pre>
+<p>　　再次在浏览器发起请求，可以发现控制台打印的正是我们要请求的资源名称。</p>
+<p>　　请求工作完成后，接下来就是发送静态资源的响应工作了，代码如下</p>
+<pre><code class="java">/**
+     * 发送静态资源文件
+     */
+    private static void sendStaticResource(OutputStream out) {
+        byte[] bytes = new byte[2048];
+        FileInputStream fis = null;
+        try {
+            File file = new File(WEB_ROOT, url);
+            ／／如果文件存在就把该文件内容发送到客户端的浏览器
+            if (file.exists()) {
+                out.write(&quot;HTTP/1.1 200 OK\n&quot;.getBytes());
+                out.write(&quot;Server:Apache-Coyote/1.1\n&quot;.getBytes());
+                out.write(&quot;Content-Type:text/html;charset=utf-8\n&quot;.getBytes());
+                out.write(&quot;\n&quot;.getBytes());
+                fis = new FileInputStream(file);
+                int len = fis.read(bytes);
+                while (len != -1) {
+                    out.write(bytes, 0, len);
+                    len = fis.read(bytes);
+                }
+            }
+            else {
+                out.write(&quot;HTTP/1.1 404 not found\n&quot;.getBytes());
+                out.write(&quot;Server:apache-Coyote/1.1\n&quot;.getBytes());
+                out.write(&quot;Content-Type:text/html;charset=utf-8\n&quot;.getBytes());
+                out.write(&quot;\n&quot;.getBytes());
+                String errorMessage = &quot;file not found&quot;;
+                out.write(errorMessage.getBytes());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fis) {
+                    fis.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }</code></pre>
+<p>　　虽然代码是有点长，但是逻辑是十分的简单的，我们把获取到的静态资源名称（即url）去到存放静态资源文件的WebContent文件夹去查找，如果存在就返回200和文件中的内容，不存在就返回404和file not found错误信息。更多的是要熟悉http协议，因此我才在最前面提醒要了解常用http协议.</p>
+<p>　　接下来我们把该函数放入main函数进行测试，我们在浏览器输入<strong><a href="http://localhost:8080/demo_01.html" target="_blank" rel="noopener">http://localhost:8080/demo_01.html</a></strong>，显示如下:</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9XZUJKcldadnUza0JMV0tyejd1RWxySVJPN1hoY1I3VlZmdW1waWNmWTZIb1Z0QmdPTTJSbFI0bFVrZE84SHBJT0h2b1J6SU02dG1zWURvUk1OMVV3cWcvNjQw?x-oss-process=image/format,png" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="img"></p>
+<p>　　在浏览器输入<a href="http://localhost:8080/demo_02.html显示如下：" target="_blank" rel="noopener">http://localhost:8080/demo_02.html显示如下：</a></p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9XZUJKcldadnUza0JMV0tyejd1RWxySVJPN1hoY1I3VmZBS3NtR0o3cWlhZ0pzeDBxc2RmMndYd2dTVnZRb0lscjlzRTdLcXlOWFJvYWVHdUo2NW53bHcvNjQw?x-oss-process=image/format,png" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="img"></p>
+<hr>
+<h3 id="-1"><a href="#-1" class="headerlink" title=""></a></h3><h3 id="四、实现对动态资源的访问"><a href="#四、实现对动态资源的访问" class="headerlink" title="四、实现对动态资源的访问"></a>四、实现对动态资源的访问</h3><hr>
+<p>　　首先我们要模仿实现一个简易的Servlet,因此我们创建一个Servlet接口,并且拥有如下生命周期，我们直接使用InputStream和OutputStream作为参数</p>
+<pre><code class="java">/**
+ * init创建之后执行
+ * service请求后执行
+ * destroy销毁后执行
+ */
+public interface Servlet {
+    public void init();
+    public void service(InputStream is, OutputStream out);
+    public void destroy();
+}</code></pre>
+<p>　　然后创建两个类Servlet_01和Servlet_02来实现该接口成为一个Servlet,分别如下</p>
+<pre><code class="java">public class Servlet_01 implements  Servlet{
+
+    @Override
+    public void init() {
+        System.out.println(&quot;Servlet_01被创建&quot;);
+    }
+
+    @Override
+    public void service(InputStream is, OutputStream out) {
+        System.out.println(&quot;Servlet_01被执行&quot;);
+    }
+
+    @Override
+    public void destroy() {
+        System.out.println(&quot;Servlet_01被销毁&quot;);
+    }
+}</code></pre>
+<p>　　</p>
+<pre><code class="java">public class Servlet_02 implements  Servlet{
+    @Override
+    public void init() {
+        System.out.println(&quot;Servlet_02被创建&quot;);
+    }
+
+    @Override
+    public void service(InputStream is, OutputStream out) {
+        System.out.println(&quot;Servlet_02被执行&quot;);
+    }
+
+    @Override
+    public void destroy() {
+        System.out.println(&quot;Servlet_02被销毁&quot;);
+    }
+}</code></pre>
+<p>​      在我们平时写完Servlet之后我们就需要在xml中进行配置或者在高版本的Servlet中进行注解配置。为了节省篇幅，这里我们使用properties文件进行配置Servlet映射让我们的tomcat服务器能够找到.</p>
+<p>　　在WebContent下创建mapper.properties文件，并添加如下内容</p>
+<pre><code>Servlet1=com.tuling.mytomcat.Servlet_01
+Servlet2=com.tuling.mytomcat.Servlet_02</code></pre><p>　　同时我们需要在服务器一启动就能够把我们的配置文件内容进行加载，因此我们需要添加一个static代码块加载配置文件和一个Map存放键值对。代码如下:</p>
+<pre><code class="java">private static Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();//存放配置文件中的键值信息
+
+    /**
+     * 服务器一启动就加载配置文件
+     */
+    static{
+        Properties prop = new Properties();
+        try {
+            prop.load(new FileInputStream(WEB_ROOT + File.separator + &quot;conf.properties&quot;));
+            Set set = prop.keySet();
+            Iterator iterator = set.iterator();
+            //迭代操作
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                String value = prop.getProperty(key);
+                map.put(key, value);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }</code></pre>
+<p>　　然后我们就可以写一个方法利用<strong>java的反射机制</strong>动态的创建对象实例，并执行他的方法</p>
+<pre><code class="java">   /**
+     * 发送动态资源
+     */
+    private static void sendDynamicResource(InputStream is,OutputStream out) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        out.write(&quot;HTTP/1.1 200 OK\n&quot;.getBytes());
+        out.write(&quot;Server:apache-Coyote/1.1\n&quot;.getBytes());
+        out.write(&quot;Content-Type:text/html;charset=utf-8\n&quot;.getBytes());
+        out.write(&quot;\n&quot;.getBytes());
+        //如果配置文件中的键匹配则创建Servlet实例并执行方法
+        if (map.containsKey(url)) {
+            String value = map.get(url);
+            Class clazz = Class.forName(value);
+            Servlet servlet = (Servlet) clazz.newInstance();
+            servlet.init();
+            servlet.service(is,out);
+        }
+    }</code></pre>
+<p>　　最后我们添加该方法到主函数，但我们还要判断请求的资源是动态还是静态，在这里我们简单的用后缀名判断，有后缀名就是静态，没有后缀名就是动态。主函数修改如下。</p>
+<pre><code class="java">                if (null != url) {
+                    if (url.indexOf(&quot;.&quot;) != -1) { //如果有后缀名
+                        sendStaticResource(out);
+                    } else {
+                        sendDynamicResource(is,out);
+                    }
+                }</code></pre>
+<p>　　进行测试，我们浏览器输入<a href="http://localhost:8080/Servlet1然后进行关闭，再输入http://localhost:8080/Servlet2，控制台打印结果。" target="_blank" rel="noopener">http://localhost:8080/Servlet1然后进行关闭，再输入http://localhost:8080/Servlet2，控制台打印结果。</a></p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9XZUJKcldadnUza0JMV0tyejd1RWxySVJPN1hoY1I3VjV1dlYyaWE2WGljeHJjZ1lpYmNldlRiVGxLNGlhVTBQZXpOZFhMSW5yYTFPVjY5ZEpGS2xmY1NSQmcvNjQw?x-oss-process=image/format,png" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="img"></p>
+<hr>
+<h3 id="-2"><a href="#-2" class="headerlink" title=""></a></h3><h3 id="五、程序的关闭"><a href="#五、程序的关闭" class="headerlink" title="五、程序的关闭"></a>五、程序的关闭</h3><hr>
+<pre><code class="java">               //main函数修改如下
+                if (null != url) {
+                    if(!url.equals(SHUTDOWN_COMMAND)) {
+                        if (url.indexOf(&quot;.&quot;) != -1) {
+                            sendStaticResource(out);
+                        } else {
+                            sendDynamicResource(is, out);
+                        }
+                    }
+                    else{
+                        shutdown=true;
+                    }
+                }</code></pre>
+<p>　　当我们发送<a href="http://localhost:8080/SHUTDOWN程序关闭" target="_blank" rel="noopener">http://localhost:8080/SHUTDOWN程序关闭</a></p>
+<hr>
+<h3 id="-3"><a href="#-3" class="headerlink" title=""></a></h3><h3 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h3><hr>
+<p>　　最终的源码如下</p>
+<pre><code class="java">public class TomcatServer {
+    private static final String WEB_ROOT = System.getProperty(&quot;user.dir&quot;) + File.separator + &quot;WebContent&quot;;
+
+    private static String url = &quot;&quot;;
+
+    private static final String SHUTDOWN_COMMAND = &quot;SHUTDOWN&quot;;
+
+    private static boolean shutdown = false;
+
+    private static Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+
+    /**
+     * 服务器一启动就加载配置文件
+     */
+    static{
+        Properties prop = new Properties();
+        try {
+            prop.load(new FileInputStream(WEB_ROOT + File.separator + &quot;mapper.properties&quot;));
+            Set set = prop.keySet();
+            Iterator iterator = set.iterator();
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                String value = prop.getProperty(key);
+                map.put(key, value);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        ServerSocket serverSocket = null;
+        Socket socket = null;
+        InputStream is = null;
+        OutputStream out = null;
+        try {
+            serverSocket = new ServerSocket(8080);
+            while (!shutdown) {
+                socket = serverSocket.accept();
+                is = socket.getInputStream();
+                out = socket.getOutputStream();
+                parse(is);
+                if (null != url) {
+                    if(!url.equals(SHUTDOWN_COMMAND)) {
+                        if (url.indexOf(&quot;.&quot;) != -1) {
+                            sendStaticResource(out);
+                        } else {
+                            sendDynamicResource(is, out);
+                        }
+                    }
+                    else{
+                        shutdown=true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != is) {
+                    is.close();
+                }
+                if (null != out) {
+                    out.close();
+                }
+                if (null != socket) {
+                    socket.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * 解析http请求
+     */
+    private static void parse(InputStream is) throws IOException {
+        StringBuffer httprequest = new StringBuffer(2048);
+        byte[] bytes = new byte[2048];
+        int len=is.read(bytes);
+        httprequest.append(new String(bytes, 0,len ));
+        parseurl(httprequest);
+    }
+
+    /**
+     * 获取http请求中的请求资源名
+     *
+     * @param httprequest
+     */
+    private static void parseurl(StringBuffer httprequest) {
+        int index1, index2;
+        index1 = httprequest.indexOf(&quot; &quot;);
+        if (index1 != -1) {
+            index2 = httprequest.indexOf(&quot; &quot;, index1 + 1);
+            if (index2 &gt; index1) {
+                url = httprequest.substring(index1 + 2, index2);
+            }
+        }
+    }
+
+    /**
+     * 发送动态资源
+     */
+    private static void sendDynamicResource(InputStream is,OutputStream out) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        out.write(&quot;HTTP/1.1 200 OK\n&quot;.getBytes());
+        out.write(&quot;Server:apache-Coyote/1.1\n&quot;.getBytes());
+        out.write(&quot;Content-Type:text/html;charset=utf-8\n&quot;.getBytes());
+        out.write(&quot;\n&quot;.getBytes());
+        //如果配置文件中的键匹配则创建Servlet实例并执行方法
+        if (map.containsKey(url)) {
+            String value = map.get(url);
+            Class clazz = Class.forName(value);
+            Servlet servlet = (Servlet) clazz.newInstance();
+            servlet.init();
+            servlet.service(is,out);
+        }
+    }
+    /**
+     * 发送静态资源文件
+     */
+    private static void sendStaticResource(OutputStream out) {
+        byte[] bytes = new byte[2048];
+        FileInputStream fis = null;
+        try {
+            File file = new File(WEB_ROOT, url);
+            if (file.exists()) {
+                out.write(&quot;HTTP/1.1 200 OK\n&quot;.getBytes());
+                out.write(&quot;Server:Apache-Coyote/1.1\n&quot;.getBytes());
+                out.write(&quot;Content-Type:text/html;charset=utf-8\n&quot;.getBytes());
+                out.write(&quot;\n&quot;.getBytes());
+                fis = new FileInputStream(file);
+                int len = fis.read(bytes);
+                while (len != -1) {
+                    out.write(bytes, 0, len);
+                    len = fis.read(bytes);
+                }
+            } else {
+                out.write(&quot;HTTP/1.1 404 not found\n&quot;.getBytes());
+                out.write(&quot;Server:apache-Coyote/1.1\n&quot;.getBytes());
+                out.write(&quot;Content-Type:text/html;charset=utf-8\n&quot;.getBytes());
+                out.write(&quot;\n&quot;.getBytes());
+                String errorMessage = &quot;file not found&quot;;
+                out.write(errorMessage.getBytes());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fis) {
+                    fis.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}</code></pre>
+<p>　　总算是实现了一个属于自己的破产版tocat,但在我们平时的生产中，肯定还是要站在巨人的肩膀上。tomcat本身是一个非常复杂的系统，包含了很多的功能模块，如果对tomcat本身十分感兴趣而且想了解他的架构，推荐去看《How Tomcat Works》一本全英书，如果英语和作者一样差的话可以去看《深入剖析Tomcat》,这本书对前者进行了翻译,作者会从0开始一步一步去实现tomcat的功能，读完肯定能让你对tomcat有进一步的深入。</p>
+<p>　　感谢你们阅读我编写的推文！今天就介绍这么多啦，你们能够有所收获，代码也不一定完全的正确，如果我有任何写得不正确和不准确的地方，欢迎大家向我提出来，我们可以一起学习和交流！</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X2pwZy9XZUJKcldadnUza0JMV0tyejd1RWxySVJPN1hoY1I3VnpGTVV1ODJiWGR2aWE4YW1WZlF0aFUzNmdOQ2dJYnJNdDlSMmxMdEJlbjFOajFlNGRFVWd4TGcvNjQw?x-oss-process=image/format,png" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="img"></p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/java">java</a>
+                
+                  <a class="hover-with-bg" href="/tags/tomcat">tomcat</a>
+                
+                  <a class="hover-with-bg" href="/tags/servlet">servlet</a>
+                
+                  <a class="hover-with-bg" href="/tags/socket">socket</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E5%8F%8D%E5%B0%84">反射</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/Look-Ahead8-github.io/lib/jquery/jquery.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/popper/popper.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/Look-Ahead8-github.io/js/main.js" ></script>
+
+
+  <script src="/Look-Ahead8-github.io/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/Look-Ahead8-github.io/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/Look-Ahead8-github.io/js/post.js" ></script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "动手实现一个破产版tomcat&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/js/local-search.js" ></script>
+  <script>
+    var path = "/Look-Ahead8-github.io/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

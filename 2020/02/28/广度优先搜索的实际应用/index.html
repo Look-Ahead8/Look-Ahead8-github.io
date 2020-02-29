@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Look-Ahead8-github.io/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/Look-Ahead8-github.io/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="欢迎来到我的博客">
+  <meta name="author" content="蒙家辉">
+  <meta name="keywords" content="">
+  <title>广度优先搜索的实际应用 ~ Meng&#39;s blog</title>
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/Look-Ahead8-github.io/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/Look-Ahead8-github.io/">&nbsp;<strong>Meng's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/archives/">文章</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/Look-Ahead8-github.io/img/index.jpg')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Friday, February 28th 2020, 8:02 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.2k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      5 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>﻿# 广度优先搜索的实际应用</p>
+<hr></hr>
+<blockquote  mdtype="blockquote" style="box-sizing: border-box;margin-top: 0.8em;margin-bottom: 0.8em;border-left-width: 4px;border-left-color: rgb(66, 185, 131);padding: 10px 15px;color: rgb(119, 119, 119);background-color: rgba(66, 185, 131, 0.1);font-family: &quot;Source Sans Pro&quot;, &quot;Helvetica Neue&quot;, Arial, sans-serif;font-size: 16px;text-align: start;white-space: normal;"><h4>摘要:</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;广度优先搜索常常在算法比赛中用于求搜索类型题目的最短路径问题，需要用到队列这一种数据结构.与深度优先搜索不同，广度优先搜索先搜索相邻的结点，更容易找不到目标点，使用与只需求解最优解。若需要需求全部路径，则还是选用深度优先搜索</p></blockquote>
+
+<p>以蓝桥杯一道简单题目作为入门</p>
+<h4 id="问题描述-标题"><a href="#问题描述-标题" class="headerlink" title="问题描述## 标题"></a>问题描述## 标题</h4><p>​       学霸抢走了大家的作业，班长为了帮同学们找回作业，决定去找学霸决斗。但学霸为了不要别人打扰，住在一个城堡里，城堡外面是一个二维的格子迷宫，要进城堡必须得先通过迷宫。因为班长还有妹子要陪，磨刀不误砍柴功，他为了节约时间，从线人那里搞到了迷宫的地图，准备提前计算最短的路线。可是他现在正向妹子解释这件事情，于是就委托你帮他找一条最短的路线。</p>
+<h4 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h4><p>​        第一行两个整数n， m，为迷宫的长宽。<br>　　接下来n行，每行m个数，数之间没有间隔，为0或1中的一个。0表示这个格子可以通过，1表示不可以。假设你现在已经在迷宫坐标(1,1)的地方，即左上角，迷宫的出口在(n,m)。每次移动时只能向上下左右4个方向移动到另外一个可以通过的格子里，每次移动算一步。数据保证(1,1)，(n,m)可以通过。</p>
+<h4 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h4><p>​        第一行一个数为需要的最少步数K。<br>　　第二行K个字符，每个字符∈{U,D,L,R},分别表示上下左右。如果有多条长度相同的最短路径，选择在此表示方法下字典序最小的一个。</p>
+<h4 id="样例输入"><a href="#样例输入" class="headerlink" title="样例输入"></a>样例输入</h4><p>3 3<br>001<br>100<br>110</p>
+<h4 id="样例输出"><a href="#样例输出" class="headerlink" title="样例输出"></a>样例输出</h4><p>4<br>RDRD</p>
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>​        首先，本题只需要求解最短路径，并不需要求出全部路径，因此我们选用广度优先搜索，如果选用深度优先搜索搜索多余的路径必定会导致结果超时。</p>
+<p>​        通常求解类似问题必定会用到<strong>队列</strong>这一数据结构。在不考虑本题情况下，广度优先搜索+队列解决最短路径问题的情况如下。</p>
+<pre><code>   （1）将起始节点放入队列尾部
+
+     （2）While(队列不为空）
+
+                      取得并删除队列首节点Node
+                      if(满足条件){
+                              ...处理
+                      }
+
+                      处理该节点Node
+
+                      把Node的未处理(即还没有入队)相邻节点加入队列尾部</code></pre><p><img src="https://img-blog.csdnimg.cn/20200115171007207.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzA5NTM3,size_16,color_FFFFFF,t_70" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>​       有了思路后转换为代码就是轻而易举的事情了，也就是在此基础上添加题目所需的最短路径，值得注意的是，我们需要保证<strong>同一个节点不能重复进入队列</strong>。</p>
+<p>​       最终代码如下</p>
+<pre><code class="java">package 学霸迷宫;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+/**
+ * @author Meng
+ * @date 2019/10/11
+ */
+public class Main {
+    //下上右左
+    private static int[][] path = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+    //用于标记每个点是否用过
+    private static boolean[] used[];
+    //用于储存每个节点的信息
+    static class Node {
+        Node(int x, int y, int step,String path) {
+            this.x = x;
+            this.y = y;
+            this.step = step;
+            this.path=path;
+        }
+        String path;         //记录走到该店的路径
+        int x;               //记录每个点的x轴
+        int y;               //记录每个点的y轴
+        int step;            //几个走到该店所需要的最短步骤
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        char[][] arr = new char[n][m]; //使用二维数组存储迷宫信息
+        for (int i = 0; i &lt; arr.length; i++) {
+            String str = scanner.next();
+            arr[i] = str.toCharArray();
+        }
+        used=new boolean[n][m];
+        Queue&lt;Node&gt; queue = new LinkedList&lt;&gt;();//频繁的出队入列使用链表效率更好
+        Node node = new Node(0, 0, 0,&quot;&quot;);      //添加初始点
+        queue.offer(node);
+        while (queue.size() != 0) {
+            Node poll = queue.poll();
+            if (poll.x == n - 1 &amp;&amp; poll.y == m - 1) { // 终止条件
+                System.out.println(poll.step);
+                System.out.println(poll.path);         //输出结果
+                break;
+            }
+            for (int i = 0; i &lt; 4; i++) {
+                //for循环寻找相邻点
+                int xx = poll.x + path[i][0];
+                int yy = poll.y + path[i][1];
+                int step=poll.step+1;
+                String path=&quot;&quot;;
+                if(i==0) {
+                    path=poll.path+&quot;D&quot;;
+                }
+                if(i==1) {
+                    path=poll.path+&quot;U&quot;;
+                }
+                if(i==2){
+                    path=poll.path+&quot;R&quot;;
+                }
+                if(i==3) {
+                    path=poll.path+&quot;L&quot;;
+                }
+                if(check(xx,yy,n,m,arr)) {
+                    queue.offer(new Node(xx,yy,step,path));
+                    used[xx][yy]=true;
+                }
+            }
+        }
+    }
+    private static boolean check(int xx, int yy,int n,int m,char[][] arr) {
+        if(xx&gt;n-1||yy&gt;m-1)return false;            //越界返回
+        if(xx&lt;0||yy&lt;0)return false;                //越界返回
+        if(arr[xx][yy]==&#39;1&#39;)return false;          //1不给走
+        if(used[xx][yy])return false;              //已添加过的点不再添加
+        return true;
+    }
+}</code></pre>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/java">java</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
+                
+                  <a class="hover-with-bg" href="/tags/bfs">bfs</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E9%98%9F%E5%88%97">队列</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95">算法</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/Look-Ahead8-github.io/lib/jquery/jquery.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/popper/popper.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/Look-Ahead8-github.io/js/main.js" ></script>
+
+
+  <script src="/Look-Ahead8-github.io/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/Look-Ahead8-github.io/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/Look-Ahead8-github.io/js/post.js" ></script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "广度优先搜索的实际应用&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/js/local-search.js" ></script>
+  <script>
+    var path = "/Look-Ahead8-github.io/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

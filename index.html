@@ -16,7 +16,7 @@
   <meta name="description" content="欢迎来到我的博客">
   <meta name="author" content="蒙家辉">
   <meta name="keywords" content="">
-  <title>蒙家辉的博客</title>
+  <title>Meng&#39;s blog</title>
 
   <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/bootstrap/css/bootstrap.min.css"  >
@@ -43,7 +43,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/Look-Ahead8-github.io/">&nbsp;<strong>蒙家辉的博客</strong>&nbsp;</a>
+       href="/Look-Ahead8-github.io/">&nbsp;<strong>Meng's blog</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -60,7 +60,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/Look-Ahead8-github.io/">Home</a>
+            <a class="nav-link" href="/Look-Ahead8-github.io/">首页</a>
           </li>
         
           
@@ -68,7 +68,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/Look-Ahead8-github.io/archives/">Archives</a>
+            <a class="nav-link" href="/Look-Ahead8-github.io/archives/">文章</a>
           </li>
         
           
@@ -76,7 +76,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/Look-Ahead8-github.io/categories/">Categories</a>
+            <a class="nav-link" href="/Look-Ahead8-github.io/categories/">分类</a>
           </li>
         
           
@@ -84,7 +84,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/Look-Ahead8-github.io/tags/">Tags</a>
+            <a class="nav-link" href="/Look-Ahead8-github.io/tags/">标签</a>
           </li>
         
           
@@ -92,7 +92,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/Look-Ahead8-github.io/about/">About</a>
+            <a class="nav-link" href="/Look-Ahead8-github.io/about/">关于</a>
           </li>
         
         
@@ -107,7 +107,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('/Look-Ahead8-github.io/img/default.png')no-repeat center center;
+         style="background: url('/Look-Ahead8-github.io/img/index.jpg')no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
@@ -143,35 +143,514 @@
   <div class="row mx-auto index-card">
     
     
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/Look-Ahead8-github.io/2020/02/28/%E7%BA%A2%E9%BB%91%E6%A0%91%E8%AF%A6%E8%A7%A3(%E4%B8%80)%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E6%93%8D%E4%BD%9C/" target="_self">
+          <img src="/Look-Ahead8-github.io/img/timg.jfif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="红黑树详解(一)红黑树的介绍和操作" class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
     <div class="col-12 col-md-8 mx-auto index-info">
-      <a href="/Look-Ahead8-github.io/2020/02/27/hello-world/">
-        <p class="h4 index-header">Hello World</p>
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E7%BA%A2%E9%BB%91%E6%A0%91%E8%AF%A6%E8%A7%A3(%E4%B8%80)%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E6%93%8D%E4%BD%9C/">
+        <p class="h4 index-header">红黑树详解(一)红黑树的介绍和操作</p>
       </a>
 
-      <a href="/Look-Ahead8-github.io/2020/02/27/hello-world/">
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E7%BA%A2%E9%BB%91%E6%A0%91%E8%AF%A6%E8%A7%A3(%E4%B8%80)%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E6%93%8D%E4%BD%9C/">
         
         
           
         
         <div class="index-excerpt" >
-          <div class="index-text mb-1">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post$ hexo new &quot;My New Post&quot;
-More info: Writing
-Run server$ hexo server
-More info: Server
-Generate static files$ hexo generate
-More info: Generating
-Deploy to remote sites$ hexo deploy
-More info: Deployment
+          <div class="index-text mb-1">﻿# 红黑树详解(一)红黑树的介绍和操作
+
+摘要:
+    &nbsp;&nbsp;&nbsp;&nbsp;在很多源码涉及到大量数据处理的时候，通常都是用红黑树这一数据结构。红黑树是一种自平衡的二叉查找树，它能在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，获得较高的查找性能。本文将使用图文详细的分析红黑树
+
+一、红黑树解决了什么问题​        首先，我们要知道二叉搜索树，在不为空的情况下，左子树上所有结点的值均小于它的根结点的值，右子树上所有结点的值均大于它的根结点的值。它使得数据查找起来不是线性查找(O(n)),平均复杂度仅仅为O(log(n)).
+
+​       但是在最快情况下，二叉搜索树可能变为线性搜索，退化为链表，复杂度为O(n),那就没有意义了，如下图的情况所示。
+
+​       为了避免这种情况发生，就到了我们的主角红黑树，它规定了一些性质使得这种情况不会发生。
+二、红黑树的性质​       红黑树主要有这五条性质。
+
+    1.节点不是红色就是黑色
+    2.根节点是黑色
+    3.叶子节点(NIL)为黑色
+    4.每个红色节点的两个子节</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-28&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/java">java</a>&nbsp;
+          
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>&nbsp;
+          
+            <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91">红黑树</a>&nbsp;
+          
+            <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>&nbsp;
+          
+            <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/Look-Ahead8-github.io/2020/02/28/HashMap%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%B7%A6%E6%97%8B%E3%80%81%E5%8F%B3%E6%97%8B/" target="_self">
+          <img src="/Look-Ahead8-github.io/img/hashmap.jpg" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="HashMap的工作原理和底层实现（二）红黑树的左旋、右旋" class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/Look-Ahead8-github.io/2020/02/28/HashMap%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%B7%A6%E6%97%8B%E3%80%81%E5%8F%B3%E6%97%8B/">
+        <p class="h4 index-header">HashMap的工作原理和底层实现（二）红黑树的左旋、右旋</p>
+      </a>
+
+      <a href="/Look-Ahead8-github.io/2020/02/28/HashMap%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%B7%A6%E6%97%8B%E3%80%81%E5%8F%B3%E6%97%8B/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">﻿  HashMap中的红黑树左旋、右旋
+
+
+
+摘要:
+    &nbsp;&nbsp;&nbsp;&nbsp;HashMap是java最常用的容器之一，本文会通过阅读源码的方式来理解HashMap中是如何进行红黑树的左旋和右旋
+
+一、什么是左旋和右旋
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;红黑树的性质
+
+    每个节点要么是黑色，要么是红色。
+    根节点是黑色。
+    每个叶子节点（NIL）是黑色。
+    每个红色结点的两个子结点一定都是黑色。
+    任意一结点到每个叶子结点的路径都包含数量相同的黑结点。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每当对红黑树结点进行增删改的时候可能会破坏红黑树的性质，因此我们需要维持这5条性质。有三种方式:变色、左旋、右旋.变色简单，本文会根据HashMap的源码分析左旋和右旋
+1)左旋
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以结点p作为支点进行左旋，其左子结点不变，</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-28&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/java">java</a>&nbsp;
+          
+            <a href="/tags/hashmap">hashmap</a>&nbsp;
+          
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>&nbsp;
+          
+            <a href="/tags/%E9%93%BE%E8%A1%A8">链表</a>&nbsp;
+          
+            <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91">红黑树</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/Look-Ahead8-github.io/2020/02/28/%E8%93%9D%E6%A1%A5%E6%9D%AF%20%E7%AE%97%E6%B3%95%E8%AE%AD%E7%BB%83%20%E6%9C%80%E5%A4%A7%E5%80%BC%E8%B7%AF%E5%BE%84%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92)/" target="_self">
+          <img src="/Look-Ahead8-github.io/img/lanqiao2.jfif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="蓝桥杯 算法训练 最大值路径（动态规划)" class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E8%93%9D%E6%A1%A5%E6%9D%AF%20%E7%AE%97%E6%B3%95%E8%AE%AD%E7%BB%83%20%E6%9C%80%E5%A4%A7%E5%80%BC%E8%B7%AF%E5%BE%84%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92)/">
+        <p class="h4 index-header">蓝桥杯 算法训练 最大值路径（动态规划)</p>
+      </a>
+
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E8%93%9D%E6%A1%A5%E6%9D%AF%20%E7%AE%97%E6%B3%95%E8%AE%AD%E7%BB%83%20%E6%9C%80%E5%A4%A7%E5%80%BC%E8%B7%AF%E5%BE%84%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92)/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">﻿## 蓝桥杯 算法训练 最大值路径（动态规划）
+资源限制
+时间限制：1.0s   内存限制：256.0MB
+
+问题描述
+
+　　刷微博，编程序。如下图所示，@北京发布 提出了如下“头脑震荡”问题。对此问题做一般化描述：　　有n阶方阵，从矩阵的左下角元素为起点，从行或列（水平或垂直）两个方向上移动，直到右上角。求出有多少条路径可以使得经过的元素累加值最大，最大值是多少。
+
+输入格式
+
+　　共有n+1行。　　第一行整数n，表示矩阵的阶数，2&lt;=n&lt;=10。　　第二行起，每行n个整数，以空格分隔，共n行。
+
+输出格式
+
+　　一行，两个空格分隔的数，第一个表示最大值路径的条数，第二个表示最大值。
+
+样例输入
+
+54 5 4 5 62 6 5 4 62 6 6 5 24 5 2 2 55 2 5 6 4
+
+样例输出
+
+3 47
+
+
+​        首先这题很常规，和leetcode这道题很相似。https://leetcode-cn.com/problems/minimum-path-sum/，不过这题求的最大路径而已。难点在于还要输出最大值路径的条数，需要我们再返回去递归搜索。
 </div>
         </div>
       </a>
 
       <div class="index-btm">
         
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-27&nbsp;&nbsp;
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-28&nbsp;&nbsp;
         
         
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/java">java</a>&nbsp;
+          
+            <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>&nbsp;
+          
+            <a href="/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF">蓝桥杯</a>&nbsp;
+          
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>&nbsp;
+          
+            <a href="/tags/dfs">dfs</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/Look-Ahead8-github.io/2020/02/28/%E8%93%9D%E6%A1%A5%E6%9D%AF%20%E7%AE%97%E6%B3%95%E8%AE%AD%E7%BB%83%20K%E5%A5%BD%E6%95%B0%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%89/" target="_self">
+          <img src="/Look-Ahead8-github.io/img/lanqiao1.jfif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="蓝桥杯 算法训练 K好数（动态规划）" class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E8%93%9D%E6%A1%A5%E6%9D%AF%20%E7%AE%97%E6%B3%95%E8%AE%AD%E7%BB%83%20K%E5%A5%BD%E6%95%B0%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%89/">
+        <p class="h4 index-header">蓝桥杯 算法训练 K好数（动态规划）</p>
+      </a>
+
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E8%93%9D%E6%A1%A5%E6%9D%AF%20%E7%AE%97%E6%B3%95%E8%AE%AD%E7%BB%83%20K%E5%A5%BD%E6%95%B0%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%89/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">﻿## 蓝桥杯 算法训练 K好数（动态规划）
+资源限制
+时间限制：1.0s   内存限制：256.0MB
+
+
+问题描述
+如果一个自然数N的K进制表示中任意的相邻的两位都不是相邻的数字，那么我们就说这个数是K好数。求L位K进制数中K好数的数目。例如K = 4，L = 2的时候，所有K好数为11、13、20、22、30、31、33 共7个。由于这个数目很大，请你输出它对1000000007取模后的值。
+
+
+输入格式
+输入包含两个正整数，K和L。
+
+
+输出格式
+输出一个整数，表示答案对1000000007取模后的值。
+
+
+样例输入
+4 2
+
+
+样例输出
+7
+
+
+数据规模与约定
+对于30%的数据，KL &lt;= 106；
+对于50%的数据，K &lt;= 16， L &lt;= 10；
+对于100%的数据，1 &lt;= K,L &lt;= 100。
+
+
+思路​        首先看到要取模，大概率不能用深搜暴力，且数据规模较大,深搜只能过百分之30的数据。而我们一一列出来的时候，是可以根据L-1的情况填数的，故有依赖于子结构，所以我们用动态规划。
+1.确立dp数组的含义​        对</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-28&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/java">java</a>&nbsp;
+          
+            <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>&nbsp;
+          
+            <a href="/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF">蓝桥杯</a>&nbsp;
+          
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>&nbsp;
+          
+            <a href="/tags/dfs">dfs</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/Look-Ahead8-github.io/2020/02/28/%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%90%86%E8%A7%A3%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92(%E7%AE%80%E5%8D%95%E8%AF%A6%E7%BB%86)/" target="_self">
+          <img src="/Look-Ahead8-github.io/img/dp.jpg" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="实践中理解动态规划(简单详细)" class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%90%86%E8%A7%A3%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92(%E7%AE%80%E5%8D%95%E8%AF%A6%E7%BB%86)/">
+        <p class="h4 index-header">实践中理解动态规划(简单详细)</p>
+      </a>
+
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%90%86%E8%A7%A3%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92(%E7%AE%80%E5%8D%95%E8%AF%A6%E7%BB%86)/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">﻿  实践中理解动态规划(简单详细)
+
+
+
+摘要:
+    &nbsp;&nbsp;&nbsp;&nbsp;动态规划（dp）是算法比赛中常考的算法，个人感觉也是最有难度的算法。因此本文会介绍动态规划在实践中的几个步骤来理解动态规划
+
+一、什么是动态规划​       动态规划就是问题的最优解如果可以由子问题的最优解推导得到，则可以先求解子问题的最优解，在构造原问题的最优解；
+​       简单来说就是当前这个问题依赖于子问题，例如斐波那契数列f[n]=f[n-1]+f[n-2]，f[1]=1,f[2]=2。我们要求解的f[n]这个问题就依赖于f[n-1]和f[n-2]这个问题.
+二、动态规划的解题步骤1.确定dp数组的含义​        基本上全部的动态规划题目不考虑空间优化情况下都可以用一维或二维数组存储状态，我们需要确认该数组的下标及其该数组的值所表示的含义.
+2.找到状态转移方程​        在确认了dp数组的含义后，接着就要寻找状态转移方程，这也是整个步骤中最难的一个部分。以我举的例子来说，f[n]=f[n-1]+f[n-2]就是状态转移方程，难的动态规划题就是难在状态</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-28&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/java">java</a>&nbsp;
+          
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>&nbsp;
+          
+            <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>&nbsp;
+          
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/Look-Ahead8-github.io/2020/02/28/%E5%8A%A8%E6%89%8B%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%A0%B4%E4%BA%A7%E7%89%88tomcat/" target="_self">
+          <img src="/Look-Ahead8-github.io/img/tomcat.jfif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="动手实现一个破产版tomcat" class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E5%8A%A8%E6%89%8B%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%A0%B4%E4%BA%A7%E7%89%88tomcat/">
+        <p class="h4 index-header">动手实现一个破产版tomcat</p>
+      </a>
+
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E5%8A%A8%E6%89%8B%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%A0%B4%E4%BA%A7%E7%89%88tomcat/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">﻿# 一步一步实现一个破产版tomcat
+　　tomcat服务器在我们java后台开发中可以说是经常接触到的,每次当我们写好我们的程序时，都要启动tomcat才能生效。
+　　那么我们有没有想过tomcat到底为我们完成了什么事情？再进一步的说，我们开发时肯定离不开Servlet，那就有一个疑问为什么我们写好的Sevlet并不需要编写一个main函数new一个示例就可以生效执行我们的代码？其实这些工作都是由tomcat默默帮我们完成了。接下来我们可以自己写一个简易的破产版tomcat来简单的理解其中的奥妙。
+一、动手前的准备工作
+
+1.对HTTP协议有所了解
+2.了解对javase的io流操作
+3.了解javase的Socket编程
+4.了解java的反射机制
+
+如果你已经准备好了，那么现在就开始和我一起动手吧
+
+二、需求分析
+
+1.建立一个专门存放静态资源文件的WebContent文件夹，并能够在浏览器实现对静态资源的访问
+
+2.能够实现浏览器对Servlet的访问(即对动态资源的访问)
+
+3.在浏览器发送shutdown能实现对tomcat的关闭。
+
+
+
+三、实现对静态资源文件的访问</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-28&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/java">java</a>&nbsp;
+          
+            <a href="/tags/tomcat">tomcat</a>&nbsp;
+          
+            <a href="/tags/servlet">servlet</a>&nbsp;
+          
+            <a href="/tags/socket">socket</a>&nbsp;
+          
+            <a href="/tags/%E5%8F%8D%E5%B0%84">反射</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/Look-Ahead8-github.io/2020/02/28/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8/" target="_self">
+          <img src="/Look-Ahead8-github.io/img/bfs.jfif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="广度优先搜索的实际应用" class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8/">
+        <p class="h4 index-header">广度优先搜索的实际应用</p>
+      </a>
+
+      <a href="/Look-Ahead8-github.io/2020/02/28/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">﻿# 广度优先搜索的实际应用
+
+摘要:
+    &nbsp;&nbsp;&nbsp;&nbsp;广度优先搜索常常在算法比赛中用于求搜索类型题目的最短路径问题，需要用到队列这一种数据结构.与深度优先搜索不同，广度优先搜索先搜索相邻的结点，更容易找不到目标点，使用与只需求解最优解。若需要需求全部路径，则还是选用深度优先搜索
+
+以蓝桥杯一道简单题目作为入门
+问题描述## 标题​       学霸抢走了大家的作业，班长为了帮同学们找回作业，决定去找学霸决斗。但学霸为了不要别人打扰，住在一个城堡里，城堡外面是一个二维的格子迷宫，要进城堡必须得先通过迷宫。因为班长还有妹子要陪，磨刀不误砍柴功，他为了节约时间，从线人那里搞到了迷宫的地图，准备提前计算最短的路线。可是他现在正向妹子解释这件事情，于是就委托你帮他找一条最短的路线。
+输入格式​        第一行两个整数n， m，为迷宫的长宽。　　接下来n行，每行m个数，数之间没有间隔，为0或1中的一个。0表示这个格子可以通过，1表示不可以。假设你现在已经在迷宫坐标(1,1)的地方，即左上角，迷宫的出口在(n,m)。每次移动时只能向上下左右4个方向移动</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-28&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/java">java</a>&nbsp;
+          
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>&nbsp;
+          
+            <a href="/tags/bfs">bfs</a>&nbsp;
+          
+            <a href="/tags/%E9%98%9F%E5%88%97">队列</a>&nbsp;
+          
+            <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/Look-Ahead8-github.io/2020/02/28/HashMap%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/" target="_self">
+          <img src="/Look-Ahead8-github.io/img/hashmap.jpg" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="HashMap的工作原理和底层实现（一）" class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/Look-Ahead8-github.io/2020/02/28/HashMap%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
+        <p class="h4 index-header">HashMap的工作原理和底层实现（一）</p>
+      </a>
+
+      <a href="/Look-Ahead8-github.io/2020/02/28/HashMap%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">
+  HashMap的工作原理和底层实现（一）
+
+
+
+摘要:
+    &nbsp;&nbsp;&nbsp;&nbsp;HashMap是java最常用的容器之一，本文会先介绍一下哈希表，然后在jdk1.8的基础上，介绍HashMap的数组+链表+红黑树的原理及其它的底层实现
+
+一、什么是哈希表
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;哈希表是根据关键码值而直接进行访问的数据结构。也就是说，它通过把关键码值映射到表中（本文指的是数组）一个位置来访问，这个映射的函数叫做散列函数。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们可以通过下面一个例子来理解哈希表以及他的好处。如果我们想要在一个数组中找到某个值的下标，我们会怎么做？
+1)顺序查找
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;顺序查找一般是我们能够立刻想到的，从表中的最后一个数据元素开始，逐个同记录的关键字做比较，如果匹配成功，则查找成功；反之，如果直到表中第一个关键字查找</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-28&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/java">java</a>&nbsp;
+          
+            <a href="/tags/hashmap">hashmap</a>&nbsp;
+          
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>&nbsp;
+          
+            <a href="/tags/%E9%93%BE%E8%A1%A8">链表</a>&nbsp;
+          
+            <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91">红黑树</a>&nbsp;
+          
         
       </div>
     </div>
@@ -304,7 +783,7 @@ More info: Deployment
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "&nbsp;",
+        "不断保持学习状态&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

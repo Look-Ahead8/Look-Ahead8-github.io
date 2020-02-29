@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Look-Ahead8-github.io/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/Look-Ahead8-github.io/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="欢迎来到我的博客">
+  <meta name="author" content="蒙家辉">
+  <meta name="keywords" content="">
+  <title>实践中理解动态规划(简单详细) ~ Meng&#39;s blog</title>
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/Look-Ahead8-github.io/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/Look-Ahead8-github.io/">&nbsp;<strong>Meng's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/archives/">文章</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/Look-Ahead8-github.io/img/index.jpg')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Friday, February 28th 2020, 8:03 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    3.9k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      16 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>﻿<h3><br>  实践中理解动态规划(简单详细)</p>
+</h3>
+
+<hr></hr>
+<blockquote  mdtype="blockquote" style="box-sizing: border-box;margin-top: 0.8em;margin-bottom: 0.8em;border-left-width: 4px;border-left-color: rgb(66, 185, 131);padding: 10px 15px;color: rgb(119, 119, 119);background-color: rgba(66, 185, 131, 0.1);font-family: &quot;Source Sans Pro&quot;, &quot;Helvetica Neue&quot;, Arial, sans-serif;font-size: 16px;text-align: start;white-space: normal;"><h4>摘要:</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;动态规划（dp）是算法比赛中常考的算法，个人感觉也是最有难度的算法。因此本文会介绍动态规划在实践中的几个步骤来理解动态规划</p></blockquote>
+
+<h4 id="一、什么是动态规划"><a href="#一、什么是动态规划" class="headerlink" title="一、什么是动态规划"></a>一、什么是动态规划</h4><p>​       动态规划就是<strong>问题的最优解如果可以由子问题的最优解推导得到，则可以先求解子问题的最优解，在构造原问题的最优解；</strong></p>
+<p>​       简单来说就是当前这个问题依赖于子问题，例如斐波那契数列f[n]=f[n-1]+f[n-2]，f[1]=1,f[2]=2。我们要求解的f[n]这个问题就依赖于f[n-1]和f[n-2]这个问题.</p>
+<h4 id="二、动态规划的解题步骤"><a href="#二、动态规划的解题步骤" class="headerlink" title="二、动态规划的解题步骤"></a>二、动态规划的解题步骤</h4><h5 id="1-确定dp数组的含义"><a href="#1-确定dp数组的含义" class="headerlink" title="1.确定dp数组的含义"></a>1.确定dp数组的含义</h5><p>​        基本上全部的动态规划题目不考虑空间优化情况下都可以用一维或二维数组存储状态，<strong>我们需要确认该数组的下标及其该数组的值所表示的含义</strong>.</p>
+<h5 id="2-找到状态转移方程"><a href="#2-找到状态转移方程" class="headerlink" title="2.找到状态转移方程"></a>2.找到状态转移方程</h5><p>​        在确认了dp数组的含义后，接着就要寻找状态转移方程，这也是整个步骤中最难的一个部分。以我举的例子来说，f[n]=f[n-1]+f[n-2]就是状态转移方程，难的动态规划题就是难在状态转移方程想不出来。有了状态转移方程，接下来最后一步就简单很多了。</p>
+<h5 id="3-填表并赋初始值"><a href="#3-填表并赋初始值" class="headerlink" title="3.填表并赋初始值"></a>3.填表并赋初始值</h5><p>​         有了状态转移方程我们可以自己尝试画一下表格，<strong>对于一些不能通过状态转移方程填写的地方，就要我们手动赋予初始值。</strong>简单的状态转移方程可以直接看到哪里要赋初始值，例如斐波那契数列，明显n-1&gt;0和n-2&gt;0，因此n=1和n=2需要我们手动赋值。但是刚上手的话还是画一下表格容易理解。</p>
+<h4 id="三、实践中理解动态规划"><a href="#三、实践中理解动态规划" class="headerlink" title="三、实践中理解动态规划"></a>三、实践中理解动态规划</h4><p>我们尝试用这三个步骤求解一下简单的动态规划题目。</p>
+<h5 id="（1）爬楼梯"><a href="#（1）爬楼梯" class="headerlink" title="（1）爬楼梯"></a>（1）爬楼梯</h5><p>这是leetcode的一道原题，<a href="https://leetcode-cn.com/problems/climbing-stairs/。" target="_blank" rel="noopener">https://leetcode-cn.com/problems/climbing-stairs/。</a></p>
+<pre><code class="tex">假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+注意：给定 n 是一个正整数。
+
+示例 1：
+
+输入： 2
+输出： 2
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶</code></pre>
+<h6 id="1-确定dp数组的含义-1"><a href="#1-确定dp数组的含义-1" class="headerlink" title="1.确定dp数组的含义"></a>1.确定dp数组的含义</h6><p>​        本题属于动态规划中最基础的一题，我们只用一个一维数组dp来存储状态，i表示第i个阶梯，dp[i]表示爬到第i个阶梯总共有多少种不同的方法。当i=n时，即求出解。</p>
+<h6 id="2-找到状态转移方程-1"><a href="#2-找到状态转移方程-1" class="headerlink" title="2.找到状态转移方程"></a>2.找到状态转移方程</h6><p>​         这个需要动一点脑筋，因为一次只能走1步或者2步，我们在第三个阶梯的时候就是在<strong>走第一个阶梯的时候走2布到第三个阶梯或者在走到第二个阶梯时候走1布到三个阶梯。</strong>因此走到第三个阶梯的方法就是走到第一个阶梯的方法加上走到第二个阶梯的方法。</p>
+<p>​         状态转移方程:<strong>dp[i]=dp[i-2]+dp[i-1]</strong></p>
+<h6 id="3-填表并赋初始值-1"><a href="#3-填表并赋初始值-1" class="headerlink" title="3.填表并赋初始值"></a>3.填表并赋初始值</h6><p>​         仔细一看其实状态转移方程就是斐波那契数列，很明显我们对于i=2和i=1赋初始值。但是我们还是填表，等熟悉了才跳过。</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dp[i]</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>​        因为数组下标是以0开始的，我们会发现多出一列。那是因为<strong>我们第一步规定了i表示第i个阶梯</strong>。如果我们规定i表示第i+1个阶梯，则可以省掉一列,因此后者更优。因此第一步是基础，会影响我们后边的操作。</p>
+<p>​        通过表格我们发现，值根据状态转移方程无法填写i=0,1,2的情况。因此我们需要赋予初值，0</p>
+<p>是无意义的，我们就直接给定java数组默认值0，而i=1时候，即走第一个阶梯我们只需要一步，就1种情况.dp[1]=1.i=2时候，我们有两种走法，测试用例已经给出，dp[2]=2.因此赋予初始值后表格如下。</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dp[i]</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>​         剩下的则是根据状态转移方程填写.</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dp[i]</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<h6 id="4-最终代码"><a href="#4-最终代码" class="headerlink" title="4.最终代码"></a>4.最终代码</h6><p>i表示第i个阶梯</p>
+<pre><code class="java">class Solution {
+    private int[] dp;
+
+    public int climbStairs(int n){
+        dp=new int[n+1];
+        dp[1]=1;
+        if(n&gt;=2)dp[2]=2;
+        for(int i=3;i&lt;n+1;i++){
+            dp[i]=dp[i-1]+dp[i-2];
+        }
+        return dp[n];
+    }
+}</code></pre>
+<p>i表示第i+1个阶梯</p>
+<pre><code class="java">class Solution {
+    private int[] dp;
+
+    public int climbStairs(int n){
+        dp=new int[n];
+        dp[0]=1;
+        if(n&gt;1)dp[1]=2;
+        for(int i=2;i&lt;n;i++){
+            dp[i]=dp[i-1]+dp[i-2];
+        }
+        return dp[n-1];
+    }
+}</code></pre>
+<p>​        实际上，很多动态规划题都可以进行空间优化，不用数组存储状态，这里我们之后再说。这篇文章从简单开始，因此全都会用数组存储。</p>
+<h5 id="（2）不同路径"><a href="#（2）不同路径" class="headerlink" title="（2）不同路径"></a>（2）不同路径</h5><p>这也是leetcode的一道原题，链接<a href="https://leetcode-cn.com/problems/unique-paths/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/unique-paths/</a>.</p>
+<p>一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。</p>
+<p>机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。</p>
+<p>问总共有多少条不同的路径</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9hc3NldHMubGVldGNvZGUtY24uY29tL2FsaXl1bi1sYy11cGxvYWQvdXBsb2Fkcy8yMDE4LzEwLzIyL3JvYm90X21hemUucG5n?x-oss-process=image/format,png" srcset="/Look-Ahead8-github.io/img/loading.gif" alt=""></p>
+<p>例如，上图是一个7 x 3 的网格。有多少可能的路径？</p>
+<p>说明：m 和 n 的值均不超过 100。</p>
+<pre><code class="html">示例 1:
+
+输入: m = 3, n = 2
+输出: 3
+解释:
+从左上角开始，总共有 3 条路径可以到达右下角。
+
+1. 向右 -&gt; 向右 -&gt; 向下
+2. 向右 -&gt; 向下 -&gt; 向右
+3. 向下 -&gt; 向右 -&gt; 向右</code></pre>
+<h6 id="1-确定dp数组的含义-2"><a href="#1-确定dp数组的含义-2" class="headerlink" title="1.确定dp数组的含义"></a>1.确定dp数组的含义</h6><p>​           因为是二维矩阵，我们需要一个二维数组dp来存储状态，i表示行号，j表示列号。有了上一题的经验，<code>dp[i][j]</code>表示<strong>走到i+1行j+1列的可能的路径.</strong></p>
+<h6 id="2-找到状态转移方程-2"><a href="#2-找到状态转移方程-2" class="headerlink" title="2.找到状态转移方程"></a>2.找到状态转移方程</h6><p>​           因为每一次只能向下和向右移动，我们根据爬楼梯那题。<strong>每个状态的可能的路径就相当于他的上面往下走一步，左边往右走一步。</strong></p>
+<p>​           状态转移方程<code>dp[i][j]</code>=<code>dp[i-1][j]</code>+<code>dp[i][j-1]</code></p>
+<h6 id="3-填表并赋初始值-2"><a href="#3-填表并赋初始值-2" class="headerlink" title="3.填表并赋初始值"></a>3.填表并赋初始值</h6><p>​           你可以通过计算得出需要填初始值的地方，也可以进行画表格的形式。如果计算的话，要满足i-1&gt;0且j-1&gt;0,得到i&gt;1且j&gt;1。但还不是很直观，我们以7*3画表格看看.</p>
+<p>​                 </p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>​           根据状态转移方程，每一格就相当于<strong>左边的数字加上边的数字</strong>.但是有3种特殊情况，第一行是没有上边的，第一列是没有左边的，而<code>dp[0][0]</code>即没有左边也没有右边。需要我们赋初值，首先<code>dp[0][0]</code>=1，因为起点和终点相同也有一条路径，虽然不用走。然后第一行的话都是1，因为只能一直向右走这条路径，同理第一列也是.</p>
+<p>​           填好初始值后</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>​           接下来就十分简单了，我们把表完善.</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>3</td>
+<td>6</td>
+<td>10</td>
+<td>15</td>
+<td>21</td>
+<td>28</td>
+</tr>
+</tbody></table>
+<p>​          <code>dp[2][6]</code>即我们的答案.</p>
+<p>​          最终代码如下:</p>
+<pre><code class="java">class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] dp=new int[m][n];
+        dp[0][0]=1;
+        for (int i = 1; i &lt; m; i++) {
+            dp[i][0]=1;
+        }
+        for (int i = 1; i &lt; n; i++) {
+            dp[0][i]=1;
+        }
+        for (int i = 1; i &lt; m; i++) {
+            for (int j = 1; j &lt; n; j++) {
+                dp[i][j]=dp[i-1][j]+dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+}</code></pre>
+<h5 id="3-最大子序和"><a href="#3-最大子序和" class="headerlink" title="(3).最大子序和"></a>(3).最大子序和</h5><p>这题也是leetcode的原题，链接<a href="https://leetcode-cn.com/problems/maximum-subarray/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/maximum-subarray/</a></p>
+<p>给定一个整数数组 <code>nums</code> ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+<p><strong>示例:</strong></p>
+<pre><code class="html">输入: [-2,1,-3,4,-1,2,1,-5,4],
+输出: 6
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。</code></pre>
+<h6 id="1-确定dp数组的含义-3"><a href="#1-确定dp数组的含义-3" class="headerlink" title="1.确定dp数组的含义"></a>1.确定dp数组的含义</h6><p>​        这题比之前稍微增加了难度，对于求解连续问题的，最优解一般于连续子数组的开头结尾有关，这里我们尝试用结尾，来确立一个dp数组.<strong>dp[i]表示以nums[i]结尾的最大和子数组</strong></p>
+<h6 id="2-找到状态转移方程-3"><a href="#2-找到状态转移方程-3" class="headerlink" title="2.找到状态转移方程"></a>2.找到状态转移方程</h6><p>​        首先，我们思考我们如何找到确定结尾数字的最大和的连续子数组取决于他前一位数字结尾的最大值是否大于0.如果他的前一位数字结尾的最大值小于0 ，加上当前数字必定变小，因此当前状态的最大值就是本身。如果他的前一位数字结尾的最大值大于0，那么当前状态的最大值就是前一个状态的数值加上本身。等于0的情况两种都可以，这里随便取一种。因此状态转移方程：</p>
+<p>​<br>$$<br>dp[i]=<br>\begin{cases}<br>nums[i]&amp; \text{dp[i-1]&lt;=0}\<br>dp[i-1]+nums[i]&amp; \text{dp[i-1]&gt;0}<br>\end{cases}<br>$$<br>​        举个例子，以nums[1]=1结尾的最大和子数组dp[1]=1，因为dp[0]=nums[0]=-2是小于0，所以dp[1]=nums[1].</p>
+<p>​        以nums[2]=-3结尾的最大和子数组dp[2]=-2(1,-3),以为dp[1]=1大于0，所以dp[2]=dp[1]+nums[2]=-2.</p>
+<h6 id="3-填表并赋初始值-3"><a href="#3-填表并赋初始值-3" class="headerlink" title="3.填表并赋初始值"></a>3.填表并赋初始值</h6><p>表格如下:</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dp[i]</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>我们发现根据状态转移方程每填一个表格都需要左边的表格的数值，因此当i=0的时候我们是填不了的。因此我们<strong>需要为i=0赋予初始值</strong>.以nums[0]结尾的子数组的最大值很明显就是他本身，因此<strong>dp[0]=nums[0]</strong></p>
+<p>赋初始值后如下：</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dp[i]</td>
+<td>-2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>最后根据状态转移方程完成表格</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dp[i]</td>
+<td>-2</td>
+<td>1</td>
+<td>-2</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>6</td>
+<td>1</td>
+<td>5</td>
+</tr>
+</tbody></table>
+<p>我们只需要维护一个最大值max作为我们答案即可，很明显根据表格得到结果6.</p>
+<h6 id="4-代码如下"><a href="#4-代码如下" class="headerlink" title="4.代码如下"></a>4.代码如下</h6><pre><code class="java">class Solution {
+    public int maxSubArray(int[] nums) {
+        int max=nums[0];
+        int len=nums.length;
+        int[] dp=new int[len];
+        dp[0]=nums[0];
+        for (int i = 1; i &lt; len; i++) {
+            if(dp[i-1]&lt;=0)dp[i]=nums[i];
+            else dp[i]=dp[i-1]+nums[i];
+            max=Math.max(max,dp[i]);
+        }
+        return max;
+    }
+}</code></pre>
+<h5 id="（4-01背包"><a href="#（4-01背包" class="headerlink" title="（4)01背包"></a>（4)01背包</h5><p>​        接下来就要提高难度了，学习动态规划必须回的01背包问题。可以去蓝桥杯的练习系统提交或者<a href="https://www.dotcpp.com/oj/problem1924.html提交。" target="_blank" rel="noopener">https://www.dotcpp.com/oj/problem1924.html提交。</a></p>
+<pre><code>    ```html</code></pre><p>题目描述<br>给定N个物品,每个物品有一个重量W和一个价值V.你有一个能装M重量的背包.问怎么装使得所装价值最大.每个物品只有一个.</p>
+<p>输入<br>输入的第一行包含两个整数n, m，分别表示物品的个数和背包能装重量。<br>以后N行每行两个数Wi和Vi,表示物品的重量和价值</p>
+<p>输出<br>输出1行，包含一个整数，表示最大价值。</p>
+<p>样例输入<br>3 5<br>2 3<br>3 5<br>4 7</p>
+<p>样例输出<br>8<br>        ```</p>
+<h6 id="1-确定dp数组的含义-4"><a href="#1-确定dp数组的含义-4" class="headerlink" title="1.确定dp数组的含义"></a>1.确定dp数组的含义</h6><p>​          首先我们需要数组存储输入的数据，我们分别用w和v数组存储重量和价值，即<strong>w[i]表示第i件物品的重量，v[i]表示第i件物品的价值,最后使用二维数组dp存储状态，<code>dp[i][j]</code>表示对于前i件物品在重量为j的情况下所装的最大价值.</strong></p>
+<p>​          <code>dp[n][m]</code>则表示解</p>
+<h6 id="2-寻找状态转移方程"><a href="#2-寻找状态转移方程" class="headerlink" title="2.寻找状态转移方程"></a>2.寻找状态转移方程</h6><p>​          思考一下，对于前i件物品在重量为j的情况下的最大价值，我们需要查看当前这件物品的重量w[i]是否大于j，如果大于了就表示这件物品放不下，那他的<strong>最大值就和前i-1件物品重量为j的值相同，即<code>dp[i-1][j].</code></strong></p>
+<p>​          如果w[i]&lt;=j,即表明对于前i件物品重量为j的情况下能够放下当前物品，那么我们到底放不放这件物品，就需要进行比较了。如果不放，那就是<code>dp[i-1][j]</code>,如果放了，就是<code>dp[i-1][j-w[i]]+v[i]</code>,j-w[i]表示放入这件物品前的重量，整体加上v[i]就是放入这件物品前的最大值加上这件物品的价值。</p>
+<p>​          状态转移方程:<br>$$<br>dp[i][j]=<br>\begin{cases}<br>dp[i-1][j]&amp; \text w[i]&lt;j\<br>Max(dp[i-1][j],dp[i-1][j-w[i]]+v[i])&amp; \text w[i]&gt;=j\<br>\end{cases}<br>$$</p>
+<h6 id="3-填表并赋初始值-4"><a href="#3-填表并赋初始值-4" class="headerlink" title="3.填表并赋初始值"></a>3.填表并赋初始值</h6><p>对于测试用例，表格如下</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>很明显，当i=0或j=0时候，我们根据状态方程求不出，且这是没有意义的.就是默认值0.</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>当i=1且j=1时候，因为w[1]=3&gt;j,放不下该物品,<code>dp[1][1]</code>=<code>dp[1-1][1]</code>=0.</p>
+<p>i=1且j=2时候，w[1]=2=j,可以放下该物品，就比较放该物品和不放该物品哪个的价值大.<code>dp[0][2]</code>=0,<code>dp[i-1][j-w[i]]+v[i]</code>=<code>dp[0][0]+v[1]</code>=3,很明显，3更大,因此<code>dp[1][2]</code>=3</p>
+<p>同理的，当i=1时候都是3，因为<code>dp[i-1][j]</code>=0.</p>
+<p>填写完i=1时候</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>i=2且j=1时候，w[2]=3,v[2]=5.w[2]&gt;j,放不下，<code>dp[2][1]</code>=<code>dp[1][1]</code>=0</p>
+<p>i=2且j=2时候，同理,<code>dp[2][2]</code>=<code>dp[1][2]</code>=3</p>
+<p>i=2且j=3时候，w[2]=j=3,可以放的下，比较放于不放谁大.不放时候<code>dp[1][3]</code>=3,放的话<code>dp[i-1][j-w[i]]+v[i]</code>=<code>dp[1][0]+v[2]</code>=5,明显5大于3</p>
+<p>特别的是i=2且j=5时候，是8</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>5</td>
+<td>5</td>
+<td>8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>把剩下填完，最后如下：</p>
+<table>
+<thead>
+<tr>
+<th>i\j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>5</td>
+<td>5</td>
+<td>8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>5</td>
+<td>7</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<h6 id="4-代码如下-1"><a href="#4-代码如下-1" class="headerlink" title="4.代码如下"></a>4.代码如下</h6><pre><code class="java">public class Main {
+    public static void main(String[] args) {
+        Scanner scanner=new Scanner(System.in);
+        int n=scanner.nextInt();
+        int m=scanner.nextInt();
+        int[] w=new int[n+1];
+        int[] v=new int[n+1];
+        for (int i = 1; i &lt; n+1; i++) {
+            w[i]=scanner.nextInt();
+            v[i]=scanner.nextInt();
+        }
+        int[][] dp=new int[n+1][m+1];
+        for(int i=1;i&lt;n+1;i++){
+            for(int j=1;j&lt;m+1;j++){
+                if(w[i]&gt;j)dp[i][j]=dp[i-1][j];
+                else dp[i][j]=Math.max(dp[i-1][j],dp[i-1][j-w[i]]+v[i]);
+            }
+        }
+        System.out.println(dp[n][m]);
+    }
+}</code></pre>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/java">java</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95">算法</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/Look-Ahead8-github.io/lib/jquery/jquery.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/popper/popper.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/Look-Ahead8-github.io/js/main.js" ></script>
+
+
+  <script src="/Look-Ahead8-github.io/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/Look-Ahead8-github.io/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/Look-Ahead8-github.io/js/post.js" ></script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "实践中理解动态规划(简单详细)&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/js/local-search.js" ></script>
+  <script>
+    var path = "/Look-Ahead8-github.io/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
