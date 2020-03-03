@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Look-Ahead8-github.io/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/Look-Ahead8-github.io/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="欢迎来到我的博客">
+  <meta name="author" content="蒙家辉">
+  <meta name="keywords" content="">
+  <title>红黑树详解(二)红黑树的插入(附动图和案例) ~ Meng&#39;s blog</title>
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/Look-Ahead8-github.io/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/Look-Ahead8-github.io/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/Look-Ahead8-github.io/atom.xml" title="Meng's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/Look-Ahead8-github.io/">&nbsp;<strong>Meng's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/archives/">文章</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/Look-Ahead8-github.io/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/Look-Ahead8-github.io/img/index.jpg')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Tuesday, March 3rd 2020, 4:49 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.5k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      5 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>﻿# 红黑树详解(二)红黑树的插入(附动图和案例)</p>
+<hr></hr>
+<blockquote  mdtype="blockquote" style="box-sizing: border-box;margin-top: 0.8em;margin-bottom: 0.8em;border-left-width: 4px;border-left-color: rgb(66, 185, 131);padding: 10px 15px;color: rgb(119, 119, 119);background-color: rgba(66, 185, 131, 0.1);font-family: &quot;Source Sans Pro&quot;, &quot;Helvetica Neue&quot;, Arial, sans-serif;font-size: 16px;text-align: start;white-space: normal;"><h4>摘要:</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;在很多源码涉及到大量数据处理的时候，通常都是用红黑树这一数据结构。红黑树是一种自平衡的二叉查找树，它能在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，获得较高的查找性能。本文将使用图文详细的分析红黑树的插入</p></blockquote>
+
+<p>​        回顾一下红黑树的五条性质</p>
+<ul>
+    <li><strong>1.节点不是红色就是黑色</strong></li>
+    <li><strong>2.根节点是黑色</strong></li>
+    <li><strong>3.叶子节点(NIL)为黑色</strong></li>
+    <li><strong>4.每个红色节点的两个子节点都是黑色。（(从每个叶子到根的所有路径上不能有两个连续的红色节点）</strong></li>
+    <li><strong>5.从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点</strong></li>
+</ul>
+
+<p>​        红黑树的插入分为两个步骤，找到插入的位置以及插入后的平衡。找到插入的位置与二叉查找树的查找类似，本文终点讲找到位置后进行插入的平衡。</p>
+<p>​       找到插入的位置后，对于要插入的结点，我们通常都设置它为<font color=red>红色</font>。为什么这么做呢，因为如果插入结点我们设置为黑色，那么<strong>插入位置所在子树的黑色结点总是多1</strong>.必须要做自平衡，而如果插入结点为红色，就不会这样。因此我们插入结点都设置为红色。</p>
+<p>​        </p>
+<p>​       插入后可能会破坏红黑树的性质，就需要自平衡。在此之前设置一些结点的叫法，插入结点的结点为p，插入结点的祖父结点为pp，插入结点的父结点的兄弟结点为s。如图所示</p>
+<p><img src="https://img-blog.csdnimg.cn/20200303114826158.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzA5NTM3,size_16,color_FFFFFF,t_70" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-FRV4GVfv-1583207277065)(D:\Chrome\ChromeDownloads\未命名文件 (20)\].jpg)"></p>
+<p>​       </p>
+<p>​      所有的插入情形如下</p>
+<p><img src="https://img-blog.csdnimg.cn/20200303114839107.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzA5NTM3,size_16,color_FFFFFF,t_70" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-ijnfPn76-1583207277070)(D:\Chrome\ChromeDownloads\插入自平衡情况 (1)\].png)"></p>
+<h4 id="1-红黑树为空树"><a href="#1-红黑树为空树" class="headerlink" title="1.红黑树为空树"></a>1.红黑树为空树</h4><p>这种情况比较简单，根据性质2（根节点是黑色），把插入结点调为黑色，并设置为根结点就行了</p>
+<h4 id="2-插入结点的父结点为黑结点"><a href="#2-插入结点的父结点为黑结点" class="headerlink" title="2.插入结点的父结点为黑结点"></a>2.插入结点的父结点为黑结点</h4><p>这种情况是最简单的，因为黑色的父结点插入一个红色的子结点，并不会破坏红黑树的结构，因此直接插入，不需要操作。</p>
+<h4 id="3-插入结点的父结点为红结点"><a href="#3-插入结点的父结点为红结点" class="headerlink" title="3.插入结点的父结点为红结点"></a>3.插入结点的父结点为红结点</h4><p>插入结点的父结点为红结点，必定会破坏红黑树的性质4（每个红色节点的两个子节点都是黑色），</p>
+<h5 id="3-1插入结点的叔叔结点为红色"><a href="#3-1插入结点的叔叔结点为红色" class="headerlink" title="3.1插入结点的叔叔结点为红色"></a>3.1插入结点的叔叔结点为红色</h5><p>根据性质4，祖父结点不能为红色，必定为黑色。我们可以将父亲结点p和叔叔结点s变黑色，祖父结点变红色就能解决问题。但是只是局部的平衡，祖父结点变红色还可能因为祖父结点的父结点为红色而破坏红黑树平衡，因此还需要将祖父结点pp作为插入结点继续向上的平衡。</p>
+<ul>
+    <li><strong>把祖父结点pp变红色</strong></li>
+    <li><strong>把父结点p和叔叔结点变黑色</strong></li>
+    <li><strong>把pp作为新的插入结点<strong></li>
+</ul>
+
+<p><img src="https://img-blog.csdnimg.cn/20200303114853804.gif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-C8Y7tOoB-1583207277072)(D:\Chrome\ChromeDownloads\qingxing3.1.gif)\]"></p>
+<h5 id="3-2插入结点的父结点p是祖父结点pp的左子结点，插入结点的叔叔结点s不存在或为黑色"><a href="#3-2插入结点的父结点p是祖父结点pp的左子结点，插入结点的叔叔结点s不存在或为黑色" class="headerlink" title="3.2插入结点的父结点p是祖父结点pp的左子结点，插入结点的叔叔结点s不存在或为黑色"></a>3.2插入结点的父结点p是祖父结点pp的左子结点，插入结点的叔叔结点s不存在或为黑色</h5><p>这里可能会有疑问，既然父结点为红，为什么叔叔结点会为黑色，这样叔叔结点所在子树的黑色结点数目就多一了。其实还有可能类似于上述3.1请假向上平衡所产生的情况，因此插入结点的叔叔结点是有可能为黑色的。</p>
+<p>由于左边子树结点比右边少，我们就需要右旋向右边去借.</p>
+<h6 id="3-2-1-插入结点是父结点p的左子结点"><a href="#3-2-1-插入结点是父结点p的左子结点" class="headerlink" title="3.2.1 插入结点是父结点p的左子结点"></a>3.2.1 插入结点是父结点p的左子结点</h6><p>因为把pp右旋后是黑色破坏了黑色结点的数量，因此还需要将pp变红。p则需要变为原来pp的颜色，即黑色。</p>
+<ul>
+    <li><strong>对pp右旋</strong></li>
+    <li><strong>p变黑，pp变红</strong></li>
+</ul>
+
+<p><img src="https://img-blog.csdnimg.cn/20200303114906302.gif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-2Lm0JDyI-1583207277073)(D:\Chrome\ChromeDownloads\qingxing3.2.1.gif)\]"></p>
+<h6 id="3-2-2插入结点是父结点p的右子结点"><a href="#3-2-2插入结点是父结点p的右子结点" class="headerlink" title="3.2.2插入结点是父结点p的右子结点"></a>3.2.2插入结点是父结点p的右子结点</h6><p>这种情况我们发现对插入结点的父结点p进行左旋，就变成情况3.2.1了，然后按照3.2.1进行处理</p>
+<ul>
+    <li><strong>对p左旋</strong></li>
+    <li><strong>转到情况3.2.1处理</strong></li>
+</ul>
+
+<p><img src="https://img-blog.csdnimg.cn/20200303114919628.gif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-3s07O48m-1583207277074)(D:\Chrome\ChromeDownloads\qingxing3.2.2.gif)\]"></p>
+<h5 id="3-3插入结点的父结点p是祖父结点pp的右子结点，插入结点的叔叔结点s不存在或为黑色"><a href="#3-3插入结点的父结点p是祖父结点pp的右子结点，插入结点的叔叔结点s不存在或为黑色" class="headerlink" title="3.3插入结点的父结点p是祖父结点pp的右子结点，插入结点的叔叔结点s不存在或为黑色"></a>3.3插入结点的父结点p是祖父结点pp的右子结点，插入结点的叔叔结点s不存在或为黑色</h5><p>这种情况就是3.2情况的对称情况，这里有一个小技巧,把3.2的情况的左右对换就是3.3情况了</p>
+<h6 id="3-3-1插入结点是父结点p的右子结点"><a href="#3-3-1插入结点是父结点p的右子结点" class="headerlink" title="3.3.1插入结点是父结点p的右子结点"></a>3.3.1插入结点是父结点p的右子结点</h6><p>这种情况和3.2.1类似，因为是对称的，只要把左变成右，右变成左就行了。</p>
+<ul>
+    <li><strong>对pp左旋</strong></li>
+    <li><strong>p变黑，pp变红</strong></li>
+</ul>
+
+<p><img src="https://img-blog.csdnimg.cn/20200303114931816.gif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-dfDLk9Xv-1583207277075)(D:\Chrome\ChromeDownloads\qingxing3.3.1.gif)\]"></p>
+<h6 id="3-3-2插入结点是父结点p的左子结点"><a href="#3-3-2插入结点是父结点p的左子结点" class="headerlink" title="3.3.2插入结点是父结点p的左子结点"></a>3.3.2插入结点是父结点p的左子结点</h6><p>这种情况是和3.2.2类似，我们对p右旋，转为情况3.3.1</p>
+<ul>
+    <li><strong>对p右旋</strong></li>
+    <li><strong>转到情况3.3.1处理</strong></li>
+</ul>
+
+<p><img src="https://img-blog.csdnimg.cn/2020030311494141.gif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-uklMrgiJ-1583207277076)(D:\Chrome\ChromeDownloads\qingxing3.3.2.gif)\]"></p>
+<h4 id="实战中尝试"><a href="#实战中尝试" class="headerlink" title="实战中尝试"></a>实战中尝试</h4><p>往下图红黑树中插入0，红黑树的变化过程</p>
+<p><img src="https://img-blog.csdnimg.cn/20200303115039186.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzA5NTM3,size_16,color_FFFFFF,t_70" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-0bUbJwiA-1583207277077)(C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\1583204876043.png)\]"></p>
+<h5 id="找到插入位置，在92的左边。插入红色结点0"><a href="#找到插入位置，在92的左边。插入红色结点0" class="headerlink" title="找到插入位置，在92的左边。插入红色结点0"></a>找到插入位置，在<font color=red>92</font>的左边。插入红色结点<font color=red>0</font></h5><p><img src="https://img-blog.csdnimg.cn/20200303115048962.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzA5NTM3,size_16,color_FFFFFF,t_70" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-oIM75z6f-1583207277078)(C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\1583204969577.png)\]"></p>
+<h5 id="插入结点0的父结点92是红结点，且叔叔结点96为红，符合情况3-1-按照情况3-1处理-注意此时把94作为新的插入结点-，-处理后如下"><a href="#插入结点0的父结点92是红结点，且叔叔结点96为红，符合情况3-1-按照情况3-1处理-注意此时把94作为新的插入结点-，-处理后如下" class="headerlink" title="插入结点0的父结点92是红结点，且叔叔结点96为红，符合情况3.1,按照情况3.1处理(注意此时把94作为新的插入结点)， 处理后如下"></a>插入结点<font color=red>0</font>的父结点<font color=red>92</font>是红结点，且叔叔结点<font color=red>96</font>为红，符合情况3.1,按照情况3.1处理(注意此时把<font color=red>94</font>作为新的插入结点)， 处理后如下</h5><p><img src="https://img-blog.csdnimg.cn/20200303115059784.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzA5NTM3,size_16,color_FFFFFF,t_70" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-J9kOZbIJ-1583207277079)(C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\1583205321809.png)\]"></p>
+<h5 id="插入结点94的父结点97为红色，且父结点为祖父结点100的左子结点，叔叔结点98为黑色。符合情况3-2-1，处理后如下"><a href="#插入结点94的父结点97为红色，且父结点为祖父结点100的左子结点，叔叔结点98为黑色。符合情况3-2-1，处理后如下" class="headerlink" title="插入结点94的父结点97为红色，且父结点为祖父结点100的左子结点，叔叔结点98为黑色。符合情况3.2.1，处理后如下"></a>插入结点<font color=red>94</font>的父结点<font color=red>97</font>为红色，且父结点为祖父结点<strong>100</strong>的左子结点，叔叔结点<strong>98</strong>为黑色。符合情况3.2.1，处理后如下</h5><p><img src="https://img-blog.csdnimg.cn/20200303115111248.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzA5NTM3,size_16,color_FFFFFF,t_70" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-BJsDTcPq-1583207277080)(C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\1583205552625.png)\]"></p>
+<h5 id="插入结点94的父结点97为黑色，不用操作，整个流程结束"><a href="#插入结点94的父结点97为黑色，不用操作，整个流程结束" class="headerlink" title="插入结点94的父结点97为黑色，不用操作，整个流程结束."></a>插入结点<font color=red>94</font>的父结点<strong>97</strong>为黑色，不用操作，整个流程结束.</h5><h5 id="整个过程如下"><a href="#整个过程如下" class="headerlink" title="整个过程如下"></a>整个过程如下</h5><p><img src="https://img-blog.csdnimg.cn/20200303115157775.gif" srcset="/Look-Ahead8-github.io/img/loading.gif" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-NAgVAsaK-1583207277081)(D:\Chrome\ChromeDownloads\ex.gif)\]"></p>
+<hr/>
+下期带来红黑树最难的删除操作，对于右疑问或者右错误的地方欢迎留下评论一起讨论
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/java">java</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/java">java</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91">红黑树</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95">算法</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/Look-Ahead8-github.io/lib/jquery/jquery.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/popper/popper.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/Look-Ahead8-github.io/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/Look-Ahead8-github.io/js/main.js" ></script>
+
+
+  <script src="/Look-Ahead8-github.io/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/Look-Ahead8-github.io/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/Look-Ahead8-github.io/js/post.js" ></script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "红黑树详解(二)红黑树的插入(附动图和案例)&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/js/local-search.js" ></script>
+  <script>
+    var path = "/Look-Ahead8-github.io/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/Look-Ahead8-github.io/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
